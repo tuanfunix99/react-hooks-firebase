@@ -1,0 +1,59 @@
+import {
+  StorageReference,
+  uploadBytesResumable,
+  getDownloadURL,
+  StorageError,
+} from "firebase/storage";
+import { useState } from "react";
+import { FunctionCallback, FunctionParamCallback } from "../../base";
+
+type Param = {
+  ref: StorageReference;
+  file: Blob | Uint8Array | ArrayBuffer;
+  onCompleted: (data: any) => void;
+  onError: (error: any) => void;
+};
+
+const UploadFile: FunctionCallback<Param> = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<StorageError | null>(null);
+  const [data, setData] = useState<string>();
+  const [progress, setProgress] = useState(0);
+
+  const uploadFunc: FunctionParamCallback<Param> = ({
+    ref,
+    file,
+    onCompleted,
+    onError,
+  }) => {
+    const uploadTask = uploadBytesResumable(ref, file);
+    setLoading(true);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const pro = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setProgress(pro);
+      },
+      (error) => {
+        setLoading(false);
+        setError(error);
+        if (onError) {
+          onError(error);
+        }
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setLoading(false);
+          setData(downloadURL);
+          if (onCompleted) {
+            onCompleted(downloadURL);
+          }
+        });
+      }
+    );
+  };
+
+  return [uploadFunc, { loading, progress, error, data }];
+};
+
+export default UploadFile;
