@@ -13,6 +13,7 @@ npm install react-hooks-firebase-v9
 ## useAuth()
 
 index.tsx
+
 ```typescript
 import { FirebaseProvider, createApp } from "react-hooks-firebase-v9";
 
@@ -28,7 +29,7 @@ const app = createApp({
 
 <FirebaseProvider app={app}>
   <App />
-</FirebaseProvider>
+</FirebaseProvider>;
 ```
 
 createUserWithEAP: create user with email and password
@@ -165,6 +166,39 @@ useEffect(() => {
     get();
  }, []);
 ```
+
+signOut
+
+```typescript
+import { useAuth } from "react-hooks-firebase-v9";
+
+/* use with callback */
+const { signOutCallback } = useAuth();
+const [signOut, { loading, data, error }] = signOutCallback();
+
+console.log(data);
+console.log(error);
+console.log(loading);
+
+const onClickHandler = () => {
+    signOut({
+      onCompleted() {
+        alert("success");
+      },
+      onError(error) {
+        alert(error);
+      },
+    });
+ };
+
+/* use with async */
+same other async in useAuth
+```
+sendEmailVerification: send link verifired mail
+
+sendPasswordResetEmail: send link reset password
+
+updateProfileAsync: update displayName or photoUrl
 
 ## Contributing
 
