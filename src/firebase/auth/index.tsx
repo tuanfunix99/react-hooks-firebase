@@ -13,6 +13,7 @@ import updateProfileAsync from "./async/updateProfileAsync";
 import createUserWithEAPAsync from "./async/createUserWithEAPAsync";
 import signInWithEAPAsync from "./async/signInWithEAPAsync";
 import signInWithProviderAsync from "./async/signInWithProviderAsync";
+import signOutAsync from "./async/signOutAsync";
 import sendPasswordResetEmailAsync from "./async/sendPasswordResetEmailAsync";
 import sendEmailVerificationAsync from "./async/sendEmailVerificationAsync";
 import returnAuth from "./auth";
@@ -42,6 +43,7 @@ export const useAuth = () => {
     createUserWithEAPAsync,
     signInWithEAPAsync,
     signInWithProviderAsync,
+    signOutAsync,
     sendPasswordResetEmailAsync,
     sendEmailVerificationAsync,
   };
