@@ -19,16 +19,11 @@ import returnAuth from "./auth";
 
 
 export const useAuth = () => {
-
   const auth = returnAuth();
 
-  function googleProvider(){
-    return new GoogleAuthProvider();
-  }
+  const googleProvider = new GoogleAuthProvider();
 
-  function githubProvider(){
-    return new GithubAuthProvider();
-  }
+  const githubProvider = new GithubAuthProvider();
 
   return {
     auth,

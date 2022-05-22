@@ -1,4 +1,3 @@
-
 export { FirebaseProvider, createApp } from './firebase';
 
 export { useAuth } from './firebase/auth';

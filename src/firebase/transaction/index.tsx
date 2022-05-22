@@ -10,9 +10,9 @@ export function useTransaction() {
 
   return {
     auth,
-    onTransactionCallback,
     googleProvider,
     githubProvider,
+    onTransactionCallback,
     createDocRef,
     createCollection,
     createStorageRef,
