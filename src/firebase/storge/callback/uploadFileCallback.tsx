@@ -24,18 +24,22 @@ const UploadFile: FunctionCallback<Param> = () => {
 
   const pause = () => {
     if (uploadTsk) {
+      setLoading(false);
       uploadTsk.pause();
     }
   };
 
   const resume = () => {
     if (uploadTsk) {
+      setLoading(true);
       uploadTsk.resume();
     }
   };
 
   const cancel = () => {
     if (uploadTsk) {
+      setLoading(false);
+      setProgress(0);
       uploadTsk.cancel();
     }
   };

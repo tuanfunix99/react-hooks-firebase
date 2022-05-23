@@ -5,6 +5,7 @@ import {
   WhereFilterOp,
   OrderByDirection,
 } from "firebase/firestore";
+import { ToUnion } from "./utils/toUnion";
 
 type Process = {
   loading?: boolean;
@@ -49,3 +50,16 @@ export type ConstraintObject = {
   limit?: number;
   orderBy?: OrderByType;
 };
+
+interface ProviderUnion{
+  google: string;
+  github: string;
+  facebook: string;
+  twitter: string;
+}
+
+export type ProviderType = ToUnion<ProviderUnion>;
+
+export type ProviderObject = {
+  [Property in keyof ProviderUnion]: any;
+}

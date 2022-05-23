@@ -2,8 +2,6 @@ import {
   Auth,
   createUserWithEmailAndPassword,
   getRedirectResult,
-  GithubAuthProvider,
-  GoogleAuthProvider,
   onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
@@ -13,6 +11,8 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
+import { ProviderType } from "../../base";
+import { providerObject } from "../../provider";
 
 import { FunctionAsyncThrowError } from "../../utils/FunctionAsync";
 
@@ -76,18 +76,21 @@ export const signInWithEAPAsync = (
 
 export const signInWithProviderAsync = (
   auth: Auth,
-  provider: GoogleAuthProvider | GithubAuthProvider,
+  provider: ProviderType,
   type: "popup" | "redirect"
 ) => {
   if (type === "redirect") {
-    signInWithRedirect(auth, provider);
+    signInWithRedirect(auth, providerObject[provider]);
     return FunctionAsyncThrowError<User>(async () => {
       const userCredential = await getRedirectResult(auth);
       return userCredential!.user;
     });
   } else {
     return FunctionAsyncThrowError<User>(async () => {
-      const userCredential = await signInWithPopup(auth, provider);
+      const userCredential = await signInWithPopup(
+        auth,
+        providerObject[provider]
+      );
       return userCredential.user;
     });
   }

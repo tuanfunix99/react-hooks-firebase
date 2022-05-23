@@ -8,6 +8,76 @@ Use npm to install react-hooks-firebase-v9
 npm install react-hooks-firebase-v9
 ```
 
+## Update v0.1.6
+useAuth: change init provider when use signinWithProvider
+```typescript
+/* old version */
+const { auth, googleProvider, signInWithProviderAsync } = useAuth();
+
+const onClickHandler = async () => {
+    const { data, error } = await signInWithProviderAsync(
+      auth,
+      googleProvider,
+      "popup" /* popup or redirect */
+    );
+    if (error) {
+      alert(error);
+    }
+    console.log(data);
+};
+
+/* new version */
+const { auth, signInWithProviderAsync } = useAuth();
+
+const onClickHandler = async () => {
+    const { data, error } = await signInWithProviderAsync(
+      auth,
+      "google", /* google | github | facebook | twitter */
+      "popup" /* popup or redirect */
+    );
+    if (error) {
+      alert(error);
+    }
+    console.log(data);
+};
+```
+useStorage: update uploadFileCallback
+```typescript
+import { useStorage } from "react-hooks-firebase-v9";
+
+const [file, setFile] = useState<any>(null);
+const { uploadFileCallback, createStorageRef } = useStorage();
+const [uploadFile, { loading, data, error, progress, pause, resume, cancel }] =
+uploadFileCallback();
+
+const handleChange = (f: any) => {
+  setFile(f);
+};
+
+console.log(data);
+console.log(error);
+console.log(loading);
+console.log(progress); // update progress
+
+const onPause = () => pause!(); // update pause
+const onResume = () => resume!(); // update resume
+const cancel = () => cancel!(); // update cancel
+
+const onClickHandler = () => {
+  const ref = createStorageRef("images/" + file.name);
+  uploadFile({
+    ref,
+    file,
+    onCompleted(url) {
+      console.log(url);
+    },
+    onError(error) {
+      alert(error);
+    },
+  });
+};
+```
+
 ## Usage
 
 index.tsx
@@ -29,6 +99,7 @@ const app = createApp({
   <App />
 </FirebaseProvider>;
 ```
+
 ## useAuth()
 
 createUserWithEAP: create user with email and password
@@ -128,19 +199,19 @@ import { useAuth } from "react-hooks-firebase-v9";
 same other callback in useAuth
 
 /* use with async */
-const { auth, googleProvider, signInWithProviderAsync } = useAuth();
+const { auth, signInWithProviderAsync } = useAuth();
 
 const onClickHandler = async () => {
     const { data, error } = await signInWithProviderAsync(
       auth,
-      googleProvider,
+      "google", /* google | github | facebook | twitter */
       "popup" /* popup or redirect */
     );
     if (error) {
       alert(error);
     }
     console.log(data);
-  };
+};
 ```
 
 getaAuth: get user login
@@ -193,14 +264,17 @@ const onClickHandler = () => {
 /* use with async */
 same other async in useAuth
 ```
-*sendEmailVerification: send link verifired mail
 
-*sendPasswordResetEmail: send link reset password
+\*sendEmailVerification: send link verifired mail
 
-*updateProfileAsync: update displayName or photoUrl
+\*sendPasswordResetEmail: send link reset password
+
+\*updateProfileAsync: update displayName or photoUrl
 
 ## useFireStore()
+
 addDoc: add new doc
+
 ```typescript
 import { useFireStore } from "react-hooks-firebase-v9";
 
@@ -213,40 +287,40 @@ console.log(error);
 console.log(loading);
 
 const onClickHandler = () => {
-   const collection = createCollection("test");
-   addDoc({
-      collection,
-      value: {
-        title: "test",
-        content: "test content",
-      },
-      onCompleted(data) {
-        console.log(data);
-      },
-      onError(error) {
-        alert(error);
-      },
-    });
- };
+  const collection = createCollection("test");
+  addDoc({
+    collection,
+    value: {
+      title: "test",
+      content: "test content",
+    },
+    onCompleted(data) {
+      console.log(data);
+    },
+    onError(error) {
+      alert(error);
+    },
+  });
+};
 
 /* use with async */
 const { addDocAsync, createCollection } = useFireStore();
 
 const onClickHandler = async () => {
-    const collection = createCollection("test");
-    const { data, error } = await addDocAsync(collection, {
-      title: "test1",
-      content: "test content",
-    });
-    if (error) {
-      alert(error);
-    }
-    console.log(data);
+  const collection = createCollection("test");
+  const { data, error } = await addDocAsync(collection, {
+    title: "test1",
+    content: "test content",
+  });
+  if (error) {
+    alert(error);
+  }
+  console.log(data);
 };
-
 ```
 
 setDoc: add new doc if not exist or update doc if exist
+
 ```typescript
 import { useFireStore } from "react-hooks-firebase-v9";
 
@@ -271,6 +345,7 @@ const onClickHandler = async () => {
 ```
 
 getDoc: get one doc
+
 ```typescript
 import { useFireStore } from "react-hooks-firebase-v9";
 
@@ -292,6 +367,7 @@ const onClickHandler = async () => {
 ```
 
 queryDoc: query docs
+
 ```typescript
 import { useFireStore } from "react-hooks-firebase-v9";
 
@@ -314,88 +390,93 @@ const onClickHandler = async () => {
 };
 
 ```
-*updateDoc: update doc
 
-*deleteDoc: delete doc
+\*updateDoc: update doc
+
+\*deleteDoc: delete doc
 
 ## useStorage()
+
 uploadFile: only uploadFile have progess, pause, resume, cancel.
+
 ```typescript
 import { useStorage } from "react-hooks-firebase-v9";
 
 const [file, setFile] = useState<any>(null);
 const { uploadFileCallback, createStorageRef } = useStorage();
-const [uploadFile, { loading, data, error, progress, pause, resume, cancel }] = uploadFileCallback();
+const [uploadFile, { loading, data, error, progress, pause, resume, cancel }] =
+uploadFileCallback();
 
 const handleChange = (f: any) => {
-    setFile(f);
+  setFile(f);
 };
 
 console.log(data);
 console.log(error);
 console.log(loading);
-console.log(progress);
+console.log(progress); // update progress
+
+const onPause = () => pause!(); // update pause
+const onResume = () => resume!(); // update resume
+const cancel = () => cancel!(); // update cancel
 
 const onClickHandler = () => {
-   const ref = createStorageRef("images/" + file.name);
-   uploadFile({
-      ref,
-      file,
-      onCompleted(url) {
-        console.log(url);
-      },
-      onError(error) {
-        alert(error);
-      },
-   });
- };
-
- const onPause = () => pause();
- const onResume = () => resume();
- const cancel = () => cancel();
-
+  const ref = createStorageRef("images/" + file.name);
+  uploadFile({
+    ref,
+    file,
+    onCompleted(url) {
+      console.log(url);
+    },
+    onError(error) {
+      alert(error);
+    },
+  });
+};
 ```
-*downloadUrl: get url file
 
-*deleteFile: delete one file
+\*downloadUrl: get url file
 
-*deleteManyFile: delete many file
+\*deleteFile: delete one file
 
-*listFile: list files
+\*deleteManyFile: delete many file
+
+\*listFile: list files
 
 ## useTransaction()
+
 use transaction run many async in one transaction
+
 ```typescript
 import { useTransaction } from "react-hooks-firebase-v9";
 
- const {
-    onTransactionCallback,
-    googleProvider,
-    auth: a,
-    createDocRef,
-  } = useTransaction();
+const {
+  onTransactionCallback,
+  googleProvider,
+  auth: a,
+  createDocRef,
+} = useTransaction();
 
-  const [onTransaction, { loading, error }] = onTransactionCallback();
+const [onTransaction, { loading, error }] = onTransactionCallback();
 
-  console.log(error);
-  console.log(loading);
+console.log(error);
+console.log(loading);
 
-  const onClickHandler = async () => {
-    onTransaction({
-      async onRun({ auth, firestore, storage }) {
-        const user = await auth.signInWithProvider(a, googleProvider, "popup");
-        const doc = createDocRef("users", user.uid);
-        await firestore.setDoc(doc, {
-          displayName: user.displayName,
-          photoUrl: user.photoURL,
-        });
-      },
-      onError(error) {
-        alert(error);
-      },
-    });
-  };
-
+const onClickHandler = async () => {
+  onTransaction({
+    async onRun({ auth, firestore, storage }) {
+      const user = await auth.signInWithProvider(a, googleProvider, "popup");
+      const doc = createDocRef("users", user.uid);
+      await firestore.setDoc(doc, {
+        displayName: user.displayName,
+        photoUrl: user.photoURL,
+      });
+    },
+    onError(error) {
+      alert(error);
+    },
+  });
+};
 ```
 
 ## Contributing

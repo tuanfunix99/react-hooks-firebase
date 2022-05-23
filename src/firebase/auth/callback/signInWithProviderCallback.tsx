@@ -1,17 +1,20 @@
 import { useState } from "react";
 import {
   User,
-  GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
-  GithubAuthProvider,
 } from "firebase/auth";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import {
+  FunctionCallback,
+  FunctionParamCallback,
+  ProviderType,
+} from "../../base";
 import returnAuth from "../auth";
+import { providerObject } from "../../provider";
 
 type Param = {
-  provider: GoogleAuthProvider | GithubAuthProvider;
+  provider: ProviderType;
   type: "popup" | "redirect";
   onCompleted?: (data?: User) => void;
   onError?: (error: any) => void;
@@ -31,7 +34,7 @@ const SignInWithProviderCallback: FunctionCallback<Param> = () => {
   }) => {
     setLoading(true);
     if (type === "redirect") {
-      signInWithRedirect(auth, provider);
+      signInWithRedirect(auth, providerObject[provider]);
       getRedirectResult(auth)
         .then((userCredential) => {
           setLoading(false);
@@ -49,7 +52,7 @@ const SignInWithProviderCallback: FunctionCallback<Param> = () => {
           }
         });
     } else {
-      signInWithPopup(auth, provider)
+      signInWithPopup(auth, providerObject[provider])
         .then((userCredential) => {
           setLoading(false);
           const user = userCredential.user;
