@@ -2,6 +2,7 @@ import uploadFileCallback from "./callback/uploadFileCallback";
 import listAllFilesCallback from "./callback/listFilesLimitCallback";
 import listFilesLimitCallback from "./callback/uploadFileCallback";
 import downloadUrlCallback from "./callback/downloadUrlCallback";
+import deleteFileCallback from "./callback/deleteFileCallback";
 
 import deleteFileAsync from "./async/deleteFileAsync";
 import deleteManyFilesAsync from "./async/deleteManyFilesAsync";
@@ -27,6 +28,7 @@ export const useStorage = () => {
     listAllFilesCallback,
     listFilesLimitCallback,
     downloadUrlCallback,
+    deleteFileCallback,
     deleteFileAsync,
     deleteManyFilesAsync,
     uploadFileAsync,

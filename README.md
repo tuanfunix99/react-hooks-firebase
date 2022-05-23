@@ -319,13 +319,13 @@ const onClickHandler = async () => {
 *deleteDoc: delete doc
 
 ## useStorage()
-uploadFile
+uploadFile: only uploadFile have progess, pause, resume, cancel.
 ```typescript
 import { useStorage } from "react-hooks-firebase-v9";
 
 const [file, setFile] = useState<any>(null);
 const { uploadFileCallback, createStorageRef } = useStorage();
-const [uploadFile, { loading, data, error }] = uploadFileCallback();
+const [uploadFile, { loading, data, error, progress, pause, resume, cancel }] = uploadFileCallback();
 
 const handleChange = (f: any) => {
     setFile(f);
@@ -334,6 +334,7 @@ const handleChange = (f: any) => {
 console.log(data);
 console.log(error);
 console.log(loading);
+console.log(progress);
 
 const onClickHandler = () => {
    const ref = createStorageRef("images/" + file.name);
@@ -348,6 +349,10 @@ const onClickHandler = () => {
       },
    });
  };
+
+ const onPause = () => pause();
+ const onResume = () => resume();
+ const cancel = () => cancel();
 
 ```
 *downloadUrl: get url file

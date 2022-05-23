@@ -3,6 +3,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
   StorageError,
+  UploadTask,
 } from "firebase/storage";
 import { useState } from "react";
 import { FunctionCallback, FunctionParamCallback } from "../../base";
@@ -19,6 +20,25 @@ const UploadFile: FunctionCallback<Param> = () => {
   const [error, setError] = useState<StorageError | null>(null);
   const [data, setData] = useState<string>();
   const [progress, setProgress] = useState(0);
+  const [uploadTsk, setUploadTask] = useState<UploadTask | null>(null);
+
+  const pause = () => {
+    if (uploadTsk) {
+      uploadTsk.pause();
+    }
+  };
+
+  const resume = () => {
+    if (uploadTsk) {
+      uploadTsk.resume();
+    }
+  };
+
+  const cancel = () => {
+    if (uploadTsk) {
+      uploadTsk.cancel();
+    }
+  };
 
   const uploadFunc: FunctionParamCallback<Param> = ({
     ref,
@@ -28,6 +48,7 @@ const UploadFile: FunctionCallback<Param> = () => {
   }) => {
     const uploadTask = uploadBytesResumable(ref, file);
     setLoading(true);
+    setUploadTask(uploadTask);
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -36,6 +57,7 @@ const UploadFile: FunctionCallback<Param> = () => {
       },
       (error) => {
         setLoading(false);
+        setUploadTask(null);
         setError(error);
         if (onError) {
           onError(error);
@@ -44,6 +66,7 @@ const UploadFile: FunctionCallback<Param> = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setLoading(false);
+          setUploadTask(null);
           setData(downloadURL);
           if (onCompleted) {
             onCompleted(downloadURL);
@@ -53,7 +76,10 @@ const UploadFile: FunctionCallback<Param> = () => {
     );
   };
 
-  return [uploadFunc, { loading, progress, error, data }];
+  return [
+    uploadFunc,
+    { loading, progress, error, data, pause, cancel, resume },
+  ];
 };
 
 export default UploadFile;

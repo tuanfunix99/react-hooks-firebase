@@ -1,4 +1,4 @@
-import {GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import {FacebookAuthProvider, GithubAuthProvider, GoogleAuthProvider, TwitterAuthProvider } from "firebase/auth";
 import createUserWithEAPCallback from "./callback/createUserWithEAPCallback";
 import signInWithEAPCallback from "./callback/signInWithEAPCallback";
 import SignInWithProviderCallback from "./callback/signInWithProviderCallback";
@@ -26,10 +26,16 @@ export const useAuth = () => {
 
   const githubProvider = new GithubAuthProvider();
 
+  const facebookProvider = new FacebookAuthProvider();
+
+  const twitterProvider = new TwitterAuthProvider();
+
   return {
     auth,
     googleProvider,
     githubProvider,
+    facebookProvider,
+    twitterProvider,
     createUserWithEAPCallback,
     signInWithEAPCallback,
     SignInWithProviderCallback,

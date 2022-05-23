@@ -11,6 +11,9 @@ type Process = {
   error?: any;
   data?: any;
   progress?: number;
+  pause?: () => void;
+  resume?: () => void;
+  cancel?: () => void;
 };
 
 export type FunctionParamCallback<T> = (input: T) => void;
