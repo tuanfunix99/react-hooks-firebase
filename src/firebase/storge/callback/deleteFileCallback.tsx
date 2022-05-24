@@ -7,8 +7,8 @@ import { FunctionCallback, FunctionParamCallback } from "../../base";
 
 type Param = {
   ref: StorageReference;
-  onCompleted: (data: boolean) => void;
-  onError: (error: any) => void;
+  onCompleted?: (data: boolean) => void;
+  onError?: (error: any) => void;
 };
 
 const DeleteFileCallback: FunctionCallback<Param> = () => {

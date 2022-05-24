@@ -7,8 +7,8 @@ import { FunctionCallback, FunctionParamCallback } from "../../base";
 
 type Param = {
   ref: StorageReference;
-  onCompleted: (data: string) => void;
-  onError: (error: any) => void;
+  onCompleted?: (data: string) => void;
+  onError?: (error: any) => void;
 };
 
 const DownloadUrlCallback: FunctionCallback<Param> = () => {

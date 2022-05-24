@@ -4,8 +4,8 @@ import { FunctionCallback, FunctionParamCallback } from "../../base";
 
 type Param = {
   ref: StorageReference;
-  onCompleted: (data: ListResult) => void;
-  onError: (error: any) => void;
+  onCompleted?: (data: ListResult) => void;
+  onError?: (error: any) => void;
 };
 
 const ListAllFilesCallback: FunctionCallback<

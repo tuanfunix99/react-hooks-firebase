@@ -11,8 +11,8 @@ import { FunctionCallback, FunctionParamCallback } from "../../base";
 type Param = {
   ref: StorageReference;
   file: Blob | Uint8Array | ArrayBuffer;
-  onCompleted: (data: any) => void;
-  onError: (error: any) => void;
+  onCompleted?: (data: any) => void;
+  onError?: (error: any) => void;
 };
 
 const UploadFile: FunctionCallback<Param> = () => {

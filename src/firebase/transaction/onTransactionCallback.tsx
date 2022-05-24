@@ -3,7 +3,7 @@ import Transaction from "./Transaction";
 
 export interface FunctionParam {
   onRun: (transaction: Transaction) => void;
-  onError: (error: any) => void;
+  onError?: (error: any) => void;
 }
 
 const OnTransactionCallback = (): [
@@ -20,7 +20,9 @@ const OnTransactionCallback = (): [
     } catch (error) {
       setLoading(false);
       setError(error);
-      onError(error);
+      if (onError) {
+        onError(error);
+      }
     }
   };
   return [onTransaction, { loading, error }];

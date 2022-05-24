@@ -28,7 +28,7 @@ export const deleteDocAsync = (doc: DocumentReference) =>
 export const getDocAsync = (doc: DocumentReference) =>
   FunctionAsyncThrowError(async () => {
     const snapshot = await getDoc(doc);
-    return snapshot.data();
+    return snapshot;
   });
 
 export const queryDocAsync = (
