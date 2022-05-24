@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { getDoc, DocumentReference, DocumentData } from "firebase/firestore";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { getDoc, DocumentReference } from "firebase/firestore";
+import { FunctionCallback, FunctionParamCallback, MapToDocumentDataReturnType } from "../../base";
 
 type Param = {
   doc: DocumentReference;
-  onCompleted?: (data: any) => void;
+  onCompleted?: (data: MapToDocumentDataReturnType) => void;
   onError?: (error: any) => void;
 };
 
 const GetDocCallback: FunctionCallback<Param> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState<DocumentData>();
+  const [data, setData] = useState<MapToDocumentDataReturnType>();
 
   const getDocFunc: FunctionParamCallback<Param> = ({
     doc,
@@ -22,12 +22,16 @@ const GetDocCallback: FunctionCallback<Param> = () => {
     getDoc(doc)
       .then((snapshot) => {
         setLoading(false);
-        if (!snapshot.exists()) {
-          throw new Error("Snapshot not found");
+        const mapData: MapToDocumentDataReturnType = {
+          id: snapshot.id,
+          data: snapshot.data(),
+          ref: snapshot.ref,
+          exists: snapshot.exists(),
+          get: snapshot.get
         }
-        setData(snapshot);
+        setData(mapData);
         if (onCompleted) {
-          onCompleted(snapshot);
+          onCompleted(mapData);
         }
       })
       .catch((error) => {

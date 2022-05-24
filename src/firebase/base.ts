@@ -28,7 +28,7 @@ export type FunctionAsync<T, U> = (input: T) => Promise<Partial<U>>
 
 export type MapToDocumentDataReturnType = {
   id: string;
-  data: DocumentData;
+  data?: DocumentData;
   ref: DocumentReference<DocumentData>;
   exists: boolean;
   get: any;
