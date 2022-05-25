@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { addDoc, CollectionReference, DocumentReference } from "firebase/firestore";
-import { FunctionParamCallback, FunctionCallback } from "../../base";
+import { FunctionParamCallback, FunctionCallback, Process } from "../../base";
 
 type Param = {
   collection: CollectionReference;
@@ -9,7 +9,7 @@ type Param = {
   onError?: (error: any) => void;
 }
 
-const AddDocCallback: FunctionCallback<Param> = () => {
+const AddDocCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState<DocumentReference<any>>();

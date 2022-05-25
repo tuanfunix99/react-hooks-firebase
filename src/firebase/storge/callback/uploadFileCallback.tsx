@@ -6,7 +6,7 @@ import {
   UploadTask,
 } from "firebase/storage";
 import { useState } from "react";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { FunctionCallback, FunctionParamCallback, Process } from "../../base";
 
 type Param = {
   ref: StorageReference;
@@ -15,7 +15,14 @@ type Param = {
   onError?: (error: any) => void;
 };
 
-const UploadFile: FunctionCallback<Param> = () => {
+interface ProcessUploadFile extends Process {
+  progress?: number;
+  pause?: () => void;
+  resume?: () => void;
+  cancel?: () => void;
+}
+
+const UploadFile: FunctionCallback<Param, ProcessUploadFile> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<StorageError | null>(null);
   const [data, setData] = useState<string>();

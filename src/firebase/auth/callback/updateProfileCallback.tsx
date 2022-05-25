@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { updateProfile } from "firebase/auth";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { FunctionCallback, FunctionParamCallback, Process } from "../../base";
 import returnAuth from "../auth";
 
 type UserInfo = {
@@ -14,7 +14,7 @@ type Param = {
   onError?: (error: any) => void;
 };
 
-const UpdateProfileCallback: FunctionCallback<Param> = () => {
+const UpdateProfileCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const auth = returnAuth();

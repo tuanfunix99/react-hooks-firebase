@@ -8,6 +8,7 @@ import {
 import {
   FunctionCallback,
   FunctionParamCallback,
+  Process,
   ProviderType,
 } from "../../base";
 import returnAuth from "../auth";
@@ -20,7 +21,7 @@ type Param = {
   onError?: (error: any) => void;
 };
 
-const SignInWithProviderCallback: FunctionCallback<Param> = () => {
+const SignInWithProviderCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState<User | null | undefined>(null);

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { FunctionCallback, FunctionParamCallback, Process } from "../../base";
 import returnAuth from "../auth";
 
 type Param = {
@@ -9,7 +9,7 @@ type Param = {
   onError?: (error: any) => void;
 };
 
-const SendPasswordResetEmailCallback: FunctionCallback<Param> = () => {
+const SendPasswordResetEmailCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const auth = returnAuth();

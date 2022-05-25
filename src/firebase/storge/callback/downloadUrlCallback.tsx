@@ -3,7 +3,7 @@ import {
   StorageReference,
   getDownloadURL
 } from "firebase/storage";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { FunctionCallback, FunctionParamCallback, Process } from "../../base";
 
 type Param = {
   ref: StorageReference;
@@ -11,7 +11,7 @@ type Param = {
   onError?: (error: any) => void;
 };
 
-const DownloadUrlCallback: FunctionCallback<Param> = () => {
+const DownloadUrlCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState<string>();

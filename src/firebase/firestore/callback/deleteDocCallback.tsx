@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { deleteDoc, DocumentReference } from "firebase/firestore";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { FunctionCallback, FunctionParamCallback, Process } from "../../base";
 
 type Param = {
   doc: DocumentReference;
@@ -8,7 +8,7 @@ type Param = {
   onError?: (error: any) => void;
 };
 
-const DeleteDocCallback: FunctionCallback<Param> = () => {
+const DeleteDocCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const setDocFunc: FunctionParamCallback<Param> = ({

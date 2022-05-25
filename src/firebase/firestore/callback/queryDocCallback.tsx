@@ -4,7 +4,8 @@ import {
   FunctionCallback,
   FunctionParamCallback,
   ConstraintObject,
-  MapToDocumentDataReturnType,
+  SnapshotDocumentMap,
+  Process,
 } from "../../base";
 import { mapToDocumentData, mapToQueryConstraintArray } 
 from "../../utils/map";
@@ -12,14 +13,14 @@ from "../../utils/map";
 type Param = {
   collection: CollectionReference;
   constraints: ConstraintObject;
-  onCompleted?: (data: Array<MapToDocumentDataReturnType>) => void;
+  onCompleted?: (data: Array<SnapshotDocumentMap>) => void;
   onError?: (error: any) => void;
 };
 
-const QueryDocCallback: FunctionCallback<Param> = () => {
+const QueryDocCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState<Array<MapToDocumentDataReturnType>>([]);
+  const [data, setData] = useState<Array<SnapshotDocumentMap>>([]);
 
   const queryDocFunc: FunctionParamCallback<Param> = ({
     collection,

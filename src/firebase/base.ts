@@ -7,26 +7,22 @@ import {
 } from "firebase/firestore";
 import { ToUnion } from "./utils/toUnion";
 
-type Process = {
+export interface Process {
   loading?: boolean;
   error?: any;
   data?: any;
-  progress?: number;
-  pause?: () => void;
-  resume?: () => void;
-  cancel?: () => void;
 };
 
 export type FunctionParamCallback<T> = (input: T) => void;
 
-export type FunctionCallback<T> = () => [
+export type FunctionCallback<T, U extends Process> = () => [
   func: FunctionParamCallback<T>,
-  process: Process
+  process: U
 ];
 
 export type FunctionAsync<T, U> = (input: T) => Promise<Partial<U>>
 
-export type MapToDocumentDataReturnType = {
+export type SnapshotDocumentMap = {
   id: string;
   data?: DocumentData;
   ref: DocumentReference<DocumentData>;

@@ -9,7 +9,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { ConstraintObject } from "../../base";
+import { ConstraintObject, SnapshotDocumentMap } from "../../base";
 import { FunctionAsyncThrowError } from "../../utils/FunctionAsync";
 import { mapToDocumentData, mapToQueryConstraintArray } from "../../utils/map";
 
@@ -28,7 +28,14 @@ export const deleteDocAsync = (doc: DocumentReference) =>
 export const getDocAsync = (doc: DocumentReference) =>
   FunctionAsyncThrowError(async () => {
     const snapshot = await getDoc(doc);
-    return snapshot;
+    const mapData: SnapshotDocumentMap = {
+      id: snapshot.id,
+      data: snapshot.data(),
+      ref: snapshot.ref,
+      exists: snapshot.exists(),
+      get: snapshot.get
+    }
+    return mapData;
   });
 
 export const queryDocAsync = (

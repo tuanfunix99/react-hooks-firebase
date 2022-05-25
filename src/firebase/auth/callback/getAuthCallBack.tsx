@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { onAuthStateChanged, Auth, User } from "firebase/auth";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { FunctionCallback, FunctionParamCallback, Process } from "../../base";
 import returnAuth from "../auth";
 
 type Param = {
@@ -21,7 +21,7 @@ const onAuthStateChangedPromise = (auth: Auth): Promise<User> => {
   });
 };
 
-const GetAuthCallback: FunctionCallback<Param> = () => {
+const GetAuthCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState<User | null>(null);

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StorageReference, listAll, ListResult } from "firebase/storage";
-import { FunctionCallback, FunctionParamCallback } from "../../base";
+import { FunctionCallback, FunctionParamCallback, Process } from "../../base";
 
 type Param = {
   ref: StorageReference;
@@ -9,7 +9,7 @@ type Param = {
 };
 
 const ListAllFilesCallback: FunctionCallback<
-  Param
+  Param, Process
 > = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

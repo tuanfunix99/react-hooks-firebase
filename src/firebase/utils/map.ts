@@ -6,15 +6,15 @@ import {
   orderBy,
   DocumentData,
 } from "firebase/firestore";
-import { ConstraintObject, MapToDocumentDataReturnType } from "../base";
+import { ConstraintObject, SnapshotDocumentMap } from "../base";
 
 export const mapToDocumentData = (
   docs: QueryDocumentSnapshot<DocumentData>[]
-): Array<MapToDocumentDataReturnType> => {
-  const arr: Array<MapToDocumentDataReturnType> = [];
+): Array<SnapshotDocumentMap> => {
+  const arr: Array<SnapshotDocumentMap> = [];
   if (docs.length > 0) {
     docs.forEach((doc) => {
-      const result: MapToDocumentDataReturnType = {
+      const result: SnapshotDocumentMap = {
         id: doc.id,
         data: doc.data(),
         ref: doc.ref,
