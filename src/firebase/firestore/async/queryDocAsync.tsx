@@ -1,6 +1,6 @@
 import { getDocs, query, CollectionReference } from "firebase/firestore";
 import { ConstraintObject } from "../../base";
-import { mapToDocumentData, mapToQueryConstraintArray } from "../../utils/map";
+import { mapToQueryConstraintArray } from "../../utils/map";
 import { FunctionAsyncReturnError } from "../../utils/FunctionAsync";
 
 const QueryDocAsync = (
@@ -10,8 +10,7 @@ const QueryDocAsync = (
   FunctionAsyncReturnError(async () => {
     const q = query(collection, ...mapToQueryConstraintArray(constraints));
     const snapshot = await getDocs(q);
-    const snapshotData = mapToDocumentData(snapshot.docs);
-    return snapshotData;
+    return snapshot;
   });
 
 export default QueryDocAsync;

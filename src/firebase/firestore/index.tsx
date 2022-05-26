@@ -6,6 +6,7 @@ import updateDocCallback from "./callback/updateDocCallback";
 import deleteDocCallback from "./callback/deleteDocCallback";
 import getDocCallback from "./callback/getDocCallback";
 import queryDocCallback from "./callback/queryDocCallback";
+import queryPaginationCallback from "./callback/queryPaginationCallback";
 import onTransactionCallback from "../transaction/onTransactionCallback";
 import addDocAsync from "./async/addDocAsync";
 import setDocAsync from "./async/setDocAsync";
@@ -13,6 +14,9 @@ import updateDocAsync from "./async/updateDocAsync";
 import deleteDocAsync from "./async/deleteDocAsync";
 import getDocAsync from "./async/getDocAsync";
 import queryDocAsync from "./async/queryDocAsync";
+import queryPaginationAsync from "./async/queryPaginationAsync";
+
+import { mapToDocumentData, convertToDocumentData } from '../utils/map';
 
 import {
   collection,
@@ -49,6 +53,7 @@ export const useFireStore = () => {
     deleteDocCallback,
     getDocCallback,
     queryDocCallback,
+    queryPaginationCallback,
     onTransactionCallback,
     addDocAsync,
     setDocAsync,
@@ -56,6 +61,9 @@ export const useFireStore = () => {
     deleteDocAsync,
     getDocAsync,
     queryDocAsync,
+    queryPaginationAsync,
+    mapToDocumentData,
+    convertToDocumentData
   };
 };
 

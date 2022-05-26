@@ -8,74 +8,115 @@ Use npm to install react-hooks-firebase-v9
 npm install react-hooks-firebase-v9
 ```
 
-## Update v0.1.6
-useAuth: change init provider when use signinWithProvider
+## Update new feature v0.2.0
+useAuth: update signin apple, microsoft for signInWithProvider.
 ```typescript
-/* old version */
-const { auth, googleProvider, signInWithProviderAsync } = useAuth();
-
-const onClickHandler = async () => {
-    const { data, error } = await signInWithProviderAsync(
+const { data, error } = await signInWithProviderAsync(
       auth,
-      googleProvider,
+      "google", /* google | github | facebook | twitter | apple | microsoft */
       "popup" /* popup or redirect */
-    );
-    if (error) {
-      alert(error);
-    }
-    console.log(data);
-};
-
-/* new version */
-const { auth, signInWithProviderAsync } = useAuth();
-
-const onClickHandler = async () => {
-    const { data, error } = await signInWithProviderAsync(
-      auth,
-      "google", /* google | github | facebook | twitter */
-      "popup" /* popup or redirect */
-    );
-    if (error) {
-      alert(error);
-    }
-    console.log(data);
-};
+);
 ```
-useStorage: update uploadFileCallback
+##
+useFireStore: change syntax where, orderBy in queryDoc
 ```typescript
-import { useStorage } from "react-hooks-firebase-v9";
+//old 
+where: [{ fieldPath: "age", opStr: ">=", value: 22 }]
+//new
+where: [["age", ">=", 22]]
 
-const [file, setFile] = useState<any>(null);
-const { uploadFileCallback, createStorageRef } = useStorage();
-const [uploadFile, { loading, data, error, progress, pause, resume, cancel }] =
-uploadFileCallback();
-
-const handleChange = (f: any) => {
-  setFile(f);
-};
-
-console.log(data);
-console.log(error);
-console.log(loading);
-console.log(progress); // update progress
-
-const onPause = () => pause!(); // update pause
-const onResume = () => resume!(); // update resume
-const cancel = () => cancel!(); // update cancel
-
-const onClickHandler = () => {
-  const ref = createStorageRef("images/" + file.name);
-  uploadFile({
-    ref,
-    file,
-    onCompleted(url) {
-      console.log(url);
-    },
-    onError(error) {
-      alert(error);
+//old
+orderBy: { fieldPath: "age", directionStr: "desc"}
+//new
+orderBy: [["age", "desc"]]
+```
+##
+useFireStore: update limitToLast, startAt, startAfter, endAt, endBefore in queryDoc
+```typescript
+query({
+  collection,
+  constraints: {
+     where: [["age", ">=", 22]], //WhereType[]
+     orderBy: [["age", "desc"]], //OrderByType[]
+     limit: 1, // number
+     limitToLast: 3, //number,
+     startAt: [1], //DocumentSnapshot<unknown> | unknown[]
+     startAfter: [1], //DocumentSnapshot<unknown> | unknown[]
+     endAt: [1], //DocumentSnapshot<unknown> | unknown[]
+     endBefore: [1], //DocumentSnapshot<unknown> | unknown[]
     },
   });
-};
+```
+##
+useFireStore: update funtion convertToDocumentData(), mapToDocumentData()
+```typescript
+
+import { useFireStore } from "react-hooks-firebase-v9";
+
+interface Person {
+  name: string;
+  age: number;
+}
+
+const { createDocRef, getDocAsync, createCollection, queryDocAsync, 
+mapToDocumentData, convertToDocumentData } = useFireStore()
+
+//convertToDocumentData: when use getDoc return one doc
+const doc = createDocRef("persons", "p1");
+const {data: snapshot, error} = await getDocAsync(doc);
+const person = convertToDocumentData<Person>(person);
+
+//mapToDocumentData: when use queryDoc return array docs
+const collection = createCollection("persons");
+const {data: querySnapshot, error} = await queryDocAsync(collection, {
+   orderBy: [["age", "desc"]],
+   limit: 2
+});
+const persons = mapToDocumentData<Person>(querySnapshot.docs);
+
+```
+useFireStore: update feature queryPagination use query with pagination
+```typescript
+import { useFireStore } from "react-hooks-firebase-v9";
+
+/* use with callback */
+const { createCollection, queryPaginationCallback, mapToDocumentData } = useFireStore();
+
+const [queryPagination, { loading }] = queryPaginationCallback();
+
+const onQueryHandler = () => {
+ const collection = createCollection("persons");
+ queryPagination({
+    collection,
+    pagination: {
+      limit: 2,
+      orderBy: [["age", "desc"]],
+      page: 1,
+    },
+    onCompleted(data) {
+        console.log(mapToDocumentData(data.docs));
+    },
+    onError(error) {
+        alert(error.message);
+    },
+ });
+}
+
+/* use with async */
+const { createCollection, queryPaginationAsync, mapToDocumentData } = useFireStore();
+
+const onQueryHandler = () => {
+ const collection = createCollection("persons");
+ const { error, data } = await queryPaginationAsync(collection, {
+      limit: 2,
+      orderBy: [["age", "desc"]],
+      page: 3,
+  });
+  if(error) {
+      alert(error);
+  }
+ console.log(mapToDocumentData(data!.docs));
+}
 ```
 
 ## Usage
@@ -99,6 +140,16 @@ const app = createApp({
   <App />
 </FirebaseProvider>;
 ```
+## Hooks 
+useAuth(): use auth in firebase
+
+useFireStore(): use cloud firestore in firebase
+
+useStorage(): use stoorage in firebase
+
+useTransaction(): group auth, firestore, storage in one transaction handle many async on time
+
+useDatabase: update later
 
 ## useAuth()
 
@@ -204,7 +255,7 @@ const { auth, signInWithProviderAsync } = useAuth();
 const onClickHandler = async () => {
     const { data, error } = await signInWithProviderAsync(
       auth,
-      "google", /* google | github | facebook | twitter */
+      "google", /* google | github | facebook | twitter | apple | microsoft */
       "popup" /* popup or redirect */
     );
     if (error) {
@@ -214,7 +265,7 @@ const onClickHandler = async () => {
 };
 ```
 
-getaAuth: get user login
+getAuth: get user login
 
 ```typescript
 import { useAuth } from "react-hooks-firebase-v9";
@@ -380,7 +431,7 @@ const { queryDocAsync, createCollection } = useFireStore();
 const onClickHandler = async () => {
    const collection = createCollection("persons");
    const { data: docs, error } = await queryDocAsync(collection, {
-      where: [{ fieldPath: "age", opStr: ">=", value: 22 }],
+      where: [["age", ">=", 22 ]],
       limit: 2
     });
    if (error) {
@@ -389,6 +440,49 @@ const onClickHandler = async () => {
    console.log(docs);
 };
 
+```
+queryPagination: use query with pagination
+```typescript
+import { useFireStore } from "react-hooks-firebase-v9";
+
+/* use with callback */
+const { createCollection, queryPaginationCallback, mapToDocumentData } = useFireStore();
+
+const [queryPagination, { loading }] = queryPaginationCallback();
+
+const onQueryHandler = () => {
+ const collection = createCollection("persons");
+ queryPagination({
+    collection,
+    pagination: {
+      limit: 2,
+      orderBy: [["age", "desc"]],
+      page: 1,
+    },
+    onCompleted(data) {
+        console.log(mapToDocumentData(data.docs));
+    },
+    onError(error) {
+        alert(error.message);
+    },
+ });
+}
+
+/* use with async */
+const { createCollection, queryPaginationAsync, mapToDocumentData } = useFireStore();
+
+const onQueryHandler = () => {
+ const collection = createCollection("persons");
+ const { error, data } = await queryPaginationAsync(collection, {
+      limit: 2,
+      orderBy: [["age", "desc"]],
+      page: 3,
+  });
+  if(error) {
+      alert(error);
+  }
+ console.log(mapToDocumentData(data!.docs));
+}
 ```
 
 \*updateDoc: update doc
@@ -452,7 +546,6 @@ import { useTransaction } from "react-hooks-firebase-v9";
 
 const {
   onTransactionCallback,
-  googleProvider,
   auth: a,
   createDocRef,
 } = useTransaction();
@@ -465,7 +558,7 @@ console.log(loading);
 const onClickHandler = async () => {
   onTransaction({
     async onRun({ auth, firestore, storage }) {
-      const user = await auth.signInWithProvider(a, googleProvider, "popup");
+      const user = await auth.signInWithProvider(a, "google", "popup");
       const doc = createDocRef("users", user.uid);
       await firestore.setDoc(doc, {
         displayName: user.displayName,

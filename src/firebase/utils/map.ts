@@ -4,19 +4,38 @@ import {
   where,
   limit,
   orderBy,
+  limitToLast,
+  startAt,
+  startAfter,
+  endAt,
+  endBefore,
   DocumentData,
+  DocumentSnapshot,
 } from "firebase/firestore";
 import { ConstraintObject, SnapshotDocumentMap } from "../base";
 
-export const mapToDocumentData = (
+export const convertToDocumentData = <T>(
+  doc: DocumentSnapshot<DocumentData>
+): SnapshotDocumentMap<T> => {
+  const result: SnapshotDocumentMap<T> = {
+    id: doc.id,
+    data: doc.data() as T,
+    ref: doc.ref,
+    exists: doc.exists(),
+    get: doc.get,
+  };
+  return result;
+};
+
+export const mapToDocumentData = <T>(
   docs: QueryDocumentSnapshot<DocumentData>[]
-): Array<SnapshotDocumentMap> => {
-  const arr: Array<SnapshotDocumentMap> = [];
+): Array<SnapshotDocumentMap<T>> => {
+  const arr: Array<SnapshotDocumentMap<T>> = [];
   if (docs.length > 0) {
     docs.forEach((doc) => {
-      const result: SnapshotDocumentMap = {
+      const result: SnapshotDocumentMap<T> = {
         id: doc.id,
-        data: doc.data(),
+        data: doc.data() as T,
         ref: doc.ref,
         exists: doc.exists(),
         get: doc.get,
@@ -33,19 +52,31 @@ export const mapToQueryConstraintArray = (
   const constraints: QueryConstraint[] = [];
   if (constraintObject.where) {
     constraintObject.where.forEach((wh) => {
-      constraints.push(where(wh.fieldPath, wh.opStr, wh.value));
+      constraints.push(where(wh[0], wh[1], wh[2]));
     });
   }
   if (constraintObject.limit) {
     constraints.push(limit(constraintObject.limit));
   }
   if (constraintObject.orderBy) {
-    constraints.push(
-      orderBy(
-        constraintObject.orderBy.fieldPath,
-        constraintObject.orderBy.directionStr
-      )
-    );
+    constraintObject.orderBy.forEach((ob) => {
+      constraints.push(orderBy(ob[0], ob[1]));
+    });
+  }
+  if (constraintObject.limitToLast) {
+    constraints.push(limitToLast(constraintObject.limitToLast));
+  }
+  if (constraintObject.startAt) {
+    constraints.push(startAt(constraintObject.startAt));
+  }
+  if (constraintObject.startAfter) {
+    constraints.push(startAfter(constraintObject.startAfter));
+  }
+  if (constraintObject.endAt) {
+    constraints.push(endAt(constraintObject.endAt));
+  }
+  if (constraintObject.endBefore) {
+    constraints.push(endBefore(constraintObject.endBefore));
   }
   return constraints;
 };

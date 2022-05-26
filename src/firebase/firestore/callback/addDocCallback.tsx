@@ -5,7 +5,7 @@ import { FunctionParamCallback, FunctionCallback, Process } from "../../base";
 type Param = {
   collection: CollectionReference;
   value: any;
-  onCompleted?: (data?: any) => void;
+  onCompleted?: (data?: DocumentReference<any>) => void;
   onError?: (error: any) => void;
 }
 

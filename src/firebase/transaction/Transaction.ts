@@ -15,6 +15,7 @@ import {
   queryDocAsync,
   setDocAsync,
   updateDocAsync,
+  queryPaginationAsync
 } from "./async/firestoreAsync";
 
 import {
@@ -23,6 +24,8 @@ import {
   downloadUrlAsync,
   uploadFileAsync,
 } from "./async/storageAsync";
+
+import { mapToDocumentData, convertToDocumentData } from "../utils/map";
 
 class AuthFirebase {
   getAuth = getAuthAsync;
@@ -52,6 +55,12 @@ class Firestore {
   deleteDoc = deleteDocAsync;
 
   query = queryDocAsync;
+
+  queryPagination = queryPaginationAsync;
+
+  mapToDocumentData = mapToDocumentData;
+
+  convertToDocumentData = convertToDocumentData;
 }
 
 class Storage {

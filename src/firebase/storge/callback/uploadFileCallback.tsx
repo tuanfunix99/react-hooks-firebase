@@ -15,7 +15,7 @@ type Param = {
   onError?: (error: any) => void;
 };
 
-interface ProcessUploadFile extends Process {
+export interface ProcessUploadFile extends Process {
   progress?: number;
   pause?: () => void;
   resume?: () => void;

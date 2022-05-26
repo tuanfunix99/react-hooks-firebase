@@ -1,26 +1,25 @@
 import { useState } from "react";
-import { CollectionReference, query, getDocs } from "firebase/firestore";
+import { CollectionReference, query, getDocs, QuerySnapshot, DocumentData } from "firebase/firestore";
 import {
   FunctionCallback,
   FunctionParamCallback,
   ConstraintObject,
-  SnapshotDocumentMap,
   Process,
 } from "../../base";
-import { mapToDocumentData, mapToQueryConstraintArray } 
+import { mapToQueryConstraintArray } 
 from "../../utils/map";
 
 type Param = {
   collection: CollectionReference;
   constraints: ConstraintObject;
-  onCompleted?: (data: Array<SnapshotDocumentMap>) => void;
+  onCompleted?: (data: QuerySnapshot<DocumentData>) => void;
   onError?: (error: any) => void;
 };
 
 const QueryDocCallback: FunctionCallback<Param, Process> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState<Array<SnapshotDocumentMap>>([]);
+  const [data, setData] = useState<QuerySnapshot<DocumentData> | null>(null);
 
   const queryDocFunc: FunctionParamCallback<Param> = ({
     collection,
@@ -33,13 +32,9 @@ const QueryDocCallback: FunctionCallback<Param, Process> = () => {
     getDocs(q)
       .then((snapshot) => {
         setLoading(false);
-        if (snapshot.empty) {
-          throw new Error("Snapshot not found");
-        }
-        const snapshotData = mapToDocumentData(snapshot.docs);
-        setData(snapshotData);
+        setData(snapshot);
         if (onCompleted) {
-          onCompleted(snapshotData);
+          onCompleted(snapshot);
         }
       })
       .catch((error) => {

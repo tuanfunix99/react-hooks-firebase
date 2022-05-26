@@ -1,11 +1,17 @@
-export { FirebaseProvider, createApp } from './firebase';
+export { FirebaseProvider, createApp } from "./firebase";
 
-export { useAuth } from './firebase/auth';
+export { useAuth } from "./firebase/auth";
 
-export { useFireStore } from './firebase/firestore';
+export { useFireStore } from "./firebase/firestore";
 
-export { useStorage } from './firebase/storge';
+export { useStorage } from "./firebase/storge";
 
-export { useTransaction } from './firebase/transaction';
+export { useTransaction } from "./firebase/transaction";
 
-export { SnapshotDocumentMap } from './firebase/base';
+export {
+  SnapshotDocumentMap,
+  ConstraintObject,
+  WhereType,
+  OrderByType,
+  Pagination,
+} from "./firebase/base";
