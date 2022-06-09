@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { ConstraintObject, SnapshotDocumentMap } from "../base";
 
-export const convertToDocumentData = <T>(
+export const convertToDocumentData = <T = any>(
   doc: DocumentSnapshot<DocumentData>
 ): SnapshotDocumentMap<T> => {
   const result: SnapshotDocumentMap<T> = {
@@ -27,7 +27,7 @@ export const convertToDocumentData = <T>(
   return result;
 };
 
-export const mapToDocumentData = <T>(
+export const mapToDocumentData = <T = any>(
   docs: QueryDocumentSnapshot<DocumentData>[]
 ): Array<SnapshotDocumentMap<T>> => {
   const arr: Array<SnapshotDocumentMap<T>> = [];

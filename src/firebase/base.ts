@@ -23,9 +23,9 @@ export type FunctionCallback<T, U extends Process> = () => [
 
 export type FunctionAsync<T, U> = (input: T) => Promise<Partial<U>>;
 
-export type SnapshotDocumentMap<T extends DocumentData> = {
+export type SnapshotDocumentMap<T extends any> = {
   id: string;
-  data?: T;
+  data: T;
   ref: DocumentReference<DocumentData>;
   exists: boolean;
   get: any;
