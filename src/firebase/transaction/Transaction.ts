@@ -6,6 +6,7 @@ import {
   signInWithEAPAsync,
   signInWithProviderAsync,
   updateProfileAsync,
+  signOutAsync
 } from "./async/authAsync";
 
 import {
@@ -41,6 +42,8 @@ class AuthFirebase {
   sendPasswordResetEmail = sendPasswordResetEmailAsync;
 
   sendEmailVerification = sendEmailVerificationAsync;
+
+  signOut = signOutAsync;
 }
 
 class Firestore {

@@ -9,6 +9,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
   updateProfile,
+  signOut,
   User,
 } from "firebase/auth";
 import { ProviderType } from "../../base";
@@ -104,5 +105,11 @@ type UserInfo = {
 export const updateProfileAsync = (auth: Auth, userInfo: UserInfo) =>
   FunctionAsyncThrowError(async () => {
     await updateProfile(auth.currentUser!, userInfo);
+    return true;
+  });
+
+export const signOutAsync = (auth: Auth) =>
+  FunctionAsyncThrowError(async () => {
+    await signOut(auth);
     return true;
   });
