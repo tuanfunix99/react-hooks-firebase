@@ -44,9 +44,9 @@ const QueryPaginationCallback: FunctionCallback<Param, Process> = () => {
       .then((snapshot) => {
         let start = 0;
         const allDocs = snapshot.docs;
-        if (allDocs.length < pagination.limit) {
-          throw new Error("number of docs must be greater than or equal to pagination limit");
-        }
+        // if (allDocs.length < pagination.limit) {
+        //   throw new Error("number of docs must be greater than or equal to pagination limit");
+        // }
         const numberOfPage = getNumberOfPage(allDocs.length, pagination.limit);
         if (pagination.page > numberOfPage) {
           pagination.page = numberOfPage;
@@ -62,6 +62,7 @@ const QueryPaginationCallback: FunctionCallback<Param, Process> = () => {
             startAt: start === 0 ? lastVisible : undefined,
             startAfter: start !== 0 ? lastVisible : undefined,
             limit: pagination.limit,
+            where: pagination.where
           })
         );
         getDocs(q)

@@ -57,6 +57,7 @@ export type Pagination = {
   limit: number;
   page: number;
   orderBy: Array<OrderByType>;
+  where?: Array<WhereType>;
 };
 
 interface ProviderUnion {

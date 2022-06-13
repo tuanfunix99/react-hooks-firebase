@@ -15,3 +15,5 @@ export {
   OrderByType,
   Pagination,
 } from "./firebase/base";
+
+export { Timestamp, serverTimestamp } from 'firebase/firestore';

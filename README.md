@@ -7,6 +7,29 @@ Use npm to install react-hooks-firebase-v9
 ```bash
 npm install react-hooks-firebase-v9
 ```
+## Update v0.2.3
+- Add Timestamp from firebase
+```typescript
+import { Timestamp, serverTimestamp } from 'react-hooks-firebase-v9'
+```
+- Add where queryPagination
+```typescript
+ queryPagination({
+    collection,
+    pagination: {
+      limit: 100,
+      page: 1,
+      orderBy: [["age", "desc"]],
+      where: [["age", ">=", 20]] //new feature
+    },
+      onCompleted(data) {
+        console.log(mapToDocumentData(data.docs));
+      },
+      onError(error) {
+        alert(error.message);
+      },
+    });
+```
 
 ## Update new feature v0.2.0
 useAuth: update signin apple, microsoft for signInWithProvider.

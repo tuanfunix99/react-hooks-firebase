@@ -56,9 +56,9 @@ export const queryPaginationAsync = (
     const queryDocs = await getDocs(queryAll);
     let start = 0;
     const allDocs = queryDocs.docs;
-    if (allDocs.length < pagination.limit) {
-      throw new Error("number of docs must be greater than or equal to pagination limit");
-    }
+    // if (allDocs.length < pagination.limit) {
+    //   throw new Error("number of docs must be greater than or equal to pagination limit");
+    // }
     const numberOfPage = getNumberOfPage(allDocs.length, pagination.limit);
     if (pagination.page > numberOfPage) {
       pagination.page = numberOfPage;
@@ -74,6 +74,7 @@ export const queryPaginationAsync = (
         startAt: start === 0 ? lastVisible : undefined,
         startAfter: start !== 0 ? lastVisible : undefined,
         limit: pagination.limit,
+        where: pagination.where
       })
     );
     const snapshot = await getDocs(q);
